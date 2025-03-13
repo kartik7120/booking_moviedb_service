@@ -14,7 +14,7 @@ type SeatMatrix struct {
 	gorm.Model
 	SeatNumber string `json:"seat_number"`
 	IsBooked   bool   `json:"is_booked"`
-	Type       string `json:"type"`
+	Type       string `json:"type"` // seat type for eg 2D or 3D or 4DX
 	Price      int    `json:"price"`
 	Row        int    `json:"row"`
 	Column     int    `json:"column"`
