@@ -4,7 +4,9 @@ package moviedb_service;
 
 option go_package = "github.com/kartik7120/booking_moviedb_service/cmd/grpcServer;moviedb";
 
-enum Cast_And_Crew_Type {
+import "google/protobuf/empty.proto";
+
+enum CastAndCrewType {
     ACTOR = 0;
     DIRECTOR = 1;
     PRODUCER = 2;
@@ -32,35 +34,34 @@ enum Cast_And_Crew_Type {
     OTHER = 24;
 }
 
-message Cast_And_Crew {
+message CastAndCrew {
     string name = 1;
-    Cast_And_Crew_Type type = 2;
+    CastAndCrewType type = 2;
     string character_name = 3;
     string photourl = 4;
 }
 
-message Movie_Time_Slot {
-    string startTime = 1;
-    string endTime = 2;
-    string duration = 3;
+message MovieTimeSlot {
+    string start_time = 1;
+    string end_time = 2;
+    int32 duration = 3;
     string date = 4;
     SeatType movie_format = 5;
-    // to be completed
 }
 
 message Movie {
-    string name = 1;
+    string title = 1;
     string description = 2;
-    string director = 3;
-    string producer = 4;
-    string cast = 5;
-    string genre = 6;
-    string language = 7;
-    string releaseDate = 8;
-    string duration = 9;
-    string rating = 10;
-    string trailer = 11;
-    string poster = 12;
+    int32 duration = 3;
+    repeated string language = 4;
+    repeated string type = 5;
+    repeated CastAndCrew cast_crew = 6;
+    string poster_url = 7;
+    string trailer_url = 8;
+    string release_date = 9;
+    repeated string movie_resolution = 10;
+    repeated Venue venues = 11;
+    string movieid = 12;
 }
 
 enum VenueType {
@@ -71,10 +72,10 @@ enum VenueType {
 }
 
 enum SeatType {
-    2D = 0;
-    3D = 1;
-    4D = 2;
-    Normal = 3;
+    TWO_D = 0;
+    THREE_D = 1;
+    FOUR_D = 2;
+    NORMAL = 3;
     VIP = 4;
 }
 
@@ -87,17 +88,18 @@ message SeatMatrix {
     SeatType type = 6;
 }
 
-
 message Venue {
     string name = 1;
     string address = 2;
     VenueType type = 3;
-    string description = 4;
-    int32 row = 5;
-    int32 column = 6;
-    float longitude = 7;
-    float latitude = 8;
-    int32 screen_number = 9;
+    int32 rows = 4;
+    int32 columns = 5;
+    float longitude = 6;
+    float latitude = 7;
+    int32 screen_number = 8;
+    repeated SeatMatrix seats = 9;
+    repeated MovieTimeSlot movie_time_slots = 10;
+    repeated Movie movies = 11;
 }
 
 message MovieList {
@@ -105,7 +107,9 @@ message MovieList {
 }
 
 message MovieRequest {
-    string name = 1;
+    string title = 1;
+    string movieid = 2;
+    string venueid = 3;
 }
 
 message MovieResponse {
@@ -118,7 +122,7 @@ message MovieResponse {
 message MovieListResponse {
     int32 status = 1;
     string message = 2;
-    MovieList movieList = 3;
+    MovieList movie_list = 3;
     string error = 4;
 }
 
@@ -128,4 +132,9 @@ service MovieDBService {
     rpc GetAllMovies (google.protobuf.Empty) returns (MovieListResponse);
     rpc UpdateMovie (Movie) returns (MovieResponse);
     rpc DeleteMovie (MovieRequest) returns (MovieResponse);
+    rpc AddVenue (Venue) returns (MovieResponse);
+    rpc GetVenue (MovieRequest) returns (MovieResponse);
+    rpc GetAllVenues (google.protobuf.Empty) returns (MovieListResponse);
+    rpc UpdateVenue (Venue) returns (MovieResponse);
+    rpc DeleteVenue (MovieRequest) returns (MovieResponse);
 }
