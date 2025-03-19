@@ -119,37 +119,46 @@ func TestMovieDB(t *testing.T) {
 		// }
 
 		movie := models.Movie{
-			Title:           "Doctor Strange in the Multiverse of Madness",
-			Description:     "Dr. Stephen Strange casts a forbidden spell that opens the doorway to the multiverse, including alternate versions of himself, whose threat to humanity is too great for the combined forces of Strange, Wong, and Wanda Maximoff.",
-			ReleaseDate:     releaseDate,
-			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9Gtg2DzBhmYamXBS1hKAhiwbBKS.jpg",
-			Duration:        126,
-			Language:        pq.StringArray([]string{"English", "Hindi", "Tamil"}),
-			Type:            pq.StringArray([]string{"Action", "Adventure", "Fantasy"}),
+			Title:           "Blade Runner 2049",
+			Description:     "A young blade runner's discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who's been missing for thirty years.",
+			ReleaseDate:     releaseDate, // Release Date: October 6, 2017
+			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
+			Duration:        164, // 2 hours 44 minutes
+			Language:        pq.StringArray([]string{"English", "Spanish", "French"}),
+			Type:            pq.StringArray([]string{"Science Fiction", "Drama", "Thriller"}),
 			MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
 			Venues: []models.Venue{
 				{
-					Name:      "PVR Cinemas",
-					Type:      "4DX",
-					Address:   "PVR Mall, Anna Nagar, Chennai, Tamil Nadu 600040",
-					Latitude:  13.0827,
-					Longitude: 80.2707,
-					Rows:      10,
-					Columns:   12,
+					Name:      "IMAX - Grand Cinema",
+					Type:      "IMAX",
+					Address:   "Grand Mall, Downtown, Los Angeles, CA 90012",
+					Latitude:  34.0522,
+					Longitude: -118.2437,
+					Rows:      15,
+					Columns:   20,
 					// Seats: []models.SeatMatrix{
-					// 	{Row: 1, Column: 1, Price: 700, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
-					// 	{Row: 1, Column: 2, Price: 700, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
+					// 	{Row: 1, Column: 1, Price: 1200, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
+					// 	{Row: 1, Column: 2, Price: 1200, SeatNumber: "A2", IsBooked: false, Type: "Platinum"},
+					// 	{Row: 2, Column: 1, Price: 1000, SeatNumber: "B1", IsBooked: true, Type: "Gold"},
+					// 	{Row: 2, Column: 2, Price: 1000, SeatNumber: "B2", IsBooked: false, Type: "Gold"},
 					// },
-					LanguagesSupported:   []string{"English", "Tamil", "Telugu"},
+					LanguagesSupported:   pq.StringArray([]string{"English", "Spanish"}),
 					ScreenNumber:         1,
-					MovieFormatSupported: []string{"2D", "4DX", "3D"},
+					MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
 					// MovieTimeSlots: []models.MovieTimeSlot{
 					// 	{
-					// 		StartTime:   "1742155000",
-					// 		EndTime:     "1742165000",
-					// 		Duration:    7200, // 2 hours
-					// 		Date:        movieTimeSlotDate,
-					// 		MovieFormat: "4DX",
+					// 		StartTime:   "18:00", // 6:00 PM
+					// 		EndTime:     "21:00", // 9:00 PM
+					// 		Duration:    10800,   // 3 hours
+					// 		Date:        time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC),
+					// 		MovieFormat: "IMAX",
+					// 	},
+					// 	{
+					// 		StartTime:   "21:30", // 9:30 PM
+					// 		EndTime:     "00:30", // 12:30 AM
+					// 		Duration:    10800,   // 3 hours
+					// 		Date:        time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC),
+					// 		MovieFormat: "3D",
 					// 	},
 					// },
 				},
