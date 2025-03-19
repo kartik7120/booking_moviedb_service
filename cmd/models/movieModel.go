@@ -60,19 +60,21 @@ type Movie struct {
 // Venue model
 type Venue struct {
 	gorm.Model
-	Name                 string          `json:"name" gorm:"not null"`
-	Type                 string          `json:"type" gorm:"not null"`
-	Address              string          `json:"address" gorm:"not null"`
-	Rows                 int             `json:"rows" gorm:"not null"`
-	Columns              int             `json:"columns" gorm:"not null"`
-	Seats                []SeatMatrix    `json:"seats"`
-	ScreenNumber         int             `json:"screen_number" gorm:"not null"`
-	Longitude            float64         `json:"longitude" gorm:"not null"`
-	Latitude             float64         `json:"latitude" gorm:"not null"`
-	MovieFormatSupported pq.StringArray  `json:"movie_format_supported" gorm:"type:text[];not null"`
-	LanguagesSupported   pq.StringArray  `json:"languages_supported" gorm:"type:text[];not null"`
-	MovieTimeSlots       []MovieTimeSlot `json:"movie_time_slots" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Movies               []Movie         `json:"movies" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Name                 string         `json:"name" gorm:"not null"`
+	Type                 string         `json:"type" gorm:"not null"`
+	Address              string         `json:"address" gorm:"not null"`
+	Rows                 int            `json:"rows" gorm:"not null"`
+	Columns              int            `json:"columns" gorm:"not null"`
+	ScreenNumber         int            `json:"screen_number" gorm:"not null"`
+	Longitude            float64        `json:"longitude" gorm:"not null"`
+	Latitude             float64        `json:"latitude" gorm:"not null"`
+	MovieFormatSupported pq.StringArray `json:"movie_format_supported" gorm:"type:text[];not null"`
+	LanguagesSupported   pq.StringArray `json:"languages_supported" gorm:"type:text[];not null"`
+
+	// Relationships
+	Seats          []SeatMatrix    `json:"seats" gorm:"foreignKey:VenueID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	MovieTimeSlots []MovieTimeSlot `json:"movie_time_slots" gorm:"foreignKey:VenueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Movies         []Movie         `json:"movies" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 // Explicitly define the join table for the many-to-many relationship
