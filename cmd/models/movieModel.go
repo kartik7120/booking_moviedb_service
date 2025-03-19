@@ -1,64 +1,82 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"time"
 
-type cast_and_crew struct {
+	"github.com/lib/pq"
+	"gorm.io/gorm"
+)
+
+type CastAndCrew struct {
 	gorm.Model
-	Type      string `json:"type" gorm:"required"` // cast or crew
-	Name      string `json:"name" gorm:"required"`
+	Type      string `json:"type" gorm:"not null"` // cast or crew
+	Name      string `json:"name" gorm:"not null"`
 	Character string `json:"character"`
 	PhotoURL  string `json:"photo_url"`
+	MovieID   uint
 }
 
 type SeatMatrix struct {
 	gorm.Model
-	SeatNumber string `json:"seat_number"`
+	SeatNumber string `json:"seat_number" gorm:"not null"`
 	IsBooked   bool   `json:"is_booked"`
-	Type       string `json:"type"` // seat type for eg 2D or 3D or 4DX
+	Type       string `json:"type"` // seat type (e.g., 2D, 3D, 4DX)
 	Price      int    `json:"price"`
 	Row        int    `json:"row"`
 	Column     int    `json:"column"`
+	VenueID    uint   `json:"venue_id"`
 }
 
-type Movie_time_slot struct {
+type MovieTimeSlot struct {
 	gorm.Model
-	StartTime    string `json:"start_time"`
-	EndTime      string `json:"end_time"`
-	Duration     int    `json:"duration"`
-	Movie        Movie  `json:"movie"`
-	Date         string `json:"date"`
-	Movie_Format string `json:"movie_format"`
-	Venue        Venue  `json:"venue"`
+	StartTime   string    `json:"start_time" gorm:"not null"`
+	EndTime     string    `json:"end_time" gorm:"not null"`
+	Duration    int       `json:"duration" gorm:"not null"` // in minutes
+	MovieID     uint      `json:"movie_id"`
+	Date        time.Time `json:"date" gorm:"not null"`
+	MovieFormat string    `json:"movie_format" gorm:"not null"` // movie format (e.g., 2D, 3D)
+	VenueID     uint      `json:"venue_id"`
 }
 
+// Movie model
 type Movie struct {
-	gorm.Model
-	Title           string          `json:"title" gorm:"required;unique"`
-	Description     string          `json:"description" gorm:"required"`
-	Duration        int             `json:"duration" gorm:"required"`
-	Language        []string        `json:"language" gorm:"required"`
-	Type            []string        `json:"type" gorm:"required"`
-	CastCrew        []cast_and_crew `json:"cast_crew"`
-	PosterURL       string          `json:"poster_url"`
-	TrailerURL      string          `json:"trailer_url"`
-	ReleaseDate     string          `json:"release_date" gorm:"required"`
-	MovieResolution []string        `json:"movie_resolution" gorm:"required"`
-	Venues          []Venue         `json:"venues" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;many2many:movie_venues;"` // venues where movie will be played
+	ID              uint `gorm:"primaryKey"`
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+	DeletedAt       gorm.DeletedAt `gorm:"index"`
+	Title           string         `json:"title" gorm:"not null;unique"`
+	Description     string         `json:"description" gorm:"not null"`
+	Duration        int            `json:"duration" gorm:"not null"`
+	Language        pq.StringArray `json:"language" gorm:"type:text[];not null"`
+	Type            pq.StringArray `json:"type" gorm:"type:text[];not null"`
+	CastCrew        []CastAndCrew  `json:"cast_crew"`
+	PosterURL       string         `json:"poster_url"`
+	TrailerURL      string         `json:"trailer_url"`
+	ReleaseDate     time.Time      `json:"release_date" gorm:"not null"`
+	MovieResolution pq.StringArray `json:"movie_resolution" gorm:"type:text[];not null"`
+	Venues          []Venue        `json:"venues" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
+// Venue model
 type Venue struct {
 	gorm.Model
-	Name                   string            `json:"name" gorm:"required;unique"`
-	Type                   string            `json:"type" gorm:"required"`
-	Address                string            `json:"address" gorm:"required"`
-	Rows                   int               `json:"rows" gorm:"required"`
-	Columns                int               `json:"columns" gorm:"required"`
-	Seats                  []SeatMatrix      `json:"seats"`
-	ScreenNumber           int               `json:"screen_number" gorm:"required"`
-	Longitude              float64           `json:"longitude" gorm:"required"`
-	Latitude               float64           `json:"latitude" gorm:"required"`
-	Movie_Format_Supported []string          `json:"movie_format_supported" gorm:"required"`
-	Languages_Supported    []string          `json:"languages_supported" gorm:"required"`
-	Movie_Time_Slots       []Movie_time_slot `json:"movie_time_slots" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Movies                 []Movie           `json:"movies" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;many2many:movie_venues;"`
+	Name                 string          `json:"name" gorm:"not null"`
+	Type                 string          `json:"type" gorm:"not null"`
+	Address              string          `json:"address" gorm:"not null"`
+	Rows                 int             `json:"rows" gorm:"not null"`
+	Columns              int             `json:"columns" gorm:"not null"`
+	Seats                []SeatMatrix    `json:"seats"`
+	ScreenNumber         int             `json:"screen_number" gorm:"not null"`
+	Longitude            float64         `json:"longitude" gorm:"not null"`
+	Latitude             float64         `json:"latitude" gorm:"not null"`
+	MovieFormatSupported pq.StringArray  `json:"movie_format_supported" gorm:"type:text[];not null"`
+	LanguagesSupported   pq.StringArray  `json:"languages_supported" gorm:"type:text[];not null"`
+	MovieTimeSlots       []MovieTimeSlot `json:"movie_time_slots" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Movies               []Movie         `json:"movies" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+}
+
+// Explicitly define the join table for the many-to-many relationship
+type MovieVenue struct {
+	MovieID uint `gorm:"primaryKey"`
+	VenueID uint `gorm:"primaryKey"`
 }
