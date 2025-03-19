@@ -117,13 +117,6 @@ func (m *MovieDB) AddMovie(movie models.Movie, movieTimeSlots []models.MovieTime
 		return movie, 500, tx.Error
 	}
 
-	err := tx.AutoMigrate(&models.Movie{}, &models.MovieTimeSlot{}, &models.SeatMatrix{})
-
-	if err != nil {
-		tx.Rollback()
-		return movie, 500, err
-	}
-
 	// Ensure rollback on panic
 	defer func() {
 		if r := recover(); r != nil {
@@ -148,33 +141,29 @@ func (m *MovieDB) AddMovie(movie models.Movie, movieTimeSlots []models.MovieTime
 		venue := &movie.Venues[i]
 
 		// Create Venue
-		// if err := tx.Create(venue).Error; err != nil {
-		// 	tx.Rollback()
-		// 	return movie, 500, fmt.Errorf("error inserting venue: %v", err)
-		// }
 
-		// fmt.Println("Inserted Venue ID:", venue.ID) // Debugging
+		fmt.Println("Inserted Venue ID:", venue.ID) // Debugging
 
-		// Step 3: Insert MovieTimeSlots for the venue
-		for j := range venue.MovieTimeSlots {
-			venue.MovieTimeSlots[j].MovieID = movie.ID
-			venue.MovieTimeSlots[j].VenueID = venue.ID
+		// Step 3: Insert MovieTimeSlots (from function parameter)
+		for j := range movieTimeSlots {
+			movieTimeSlots[j].MovieID = movie.ID
+			movieTimeSlots[j].VenueID = venue.ID
 		}
 
-		if len(venue.MovieTimeSlots) > 0 {
-			if err := tx.Create(&venue.MovieTimeSlots).Error; err != nil {
+		if len(movieTimeSlots) > 0 {
+			if err := tx.Create(&movieTimeSlots).Error; err != nil {
 				tx.Rollback()
 				return movie, 500, fmt.Errorf("error inserting time slots: %v", err)
 			}
 		}
 
-		// Step 4: Insert Seat Matrices for the venue
-		for k := range venue.Seats {
-			venue.Seats[k].VenueID = venue.ID
+		// Step 4: Insert Seat Matrices (from function parameter)
+		for k := range seats {
+			seats[k].VenueID = venue.ID
 		}
 
-		if len(venue.Seats) > 0 {
-			if err := tx.Create(&venue.Seats).Error; err != nil {
+		if len(seats) > 0 {
+			if err := tx.Create(&seats).Error; err != nil {
 				tx.Rollback()
 				return movie, 500, fmt.Errorf("error inserting seat matrix: %v", err)
 			}
