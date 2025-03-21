@@ -201,14 +201,8 @@ func (m *MovieDB) UpdateMovie(movieID uint, movie models.Movie) (models.Movie, i
 }
 
 func (m *MovieDB) DeleteMovie(movieID uint) (int, error) {
-	var movie models.Movie
-	result := m.DB.Conn.First(&movie, movieID)
 
-	if result.Error != nil {
-		return 500, result.Error
-	}
-
-	result = m.DB.Conn.Delete(&movie)
+	result := m.DB.Conn.Unscoped().Delete(&models.Movie{}, movieID)
 
 	if result.Error != nil {
 		return 500, result.Error
@@ -219,13 +213,15 @@ func (m *MovieDB) DeleteMovie(movieID uint) (int, error) {
 
 func (m *MovieDB) DeleteVenue(venueId uint) (int, error) {
 	var venue models.Venue
-	result := m.DB.Conn.First(&venue, venueId)
+	var seats models.SeatMatrix
+
+	result := m.DB.Conn.Unscoped().Where("venue_id = ?", venueId).Delete(&seats)
 
 	if result.Error != nil {
 		return 500, result.Error
 	}
 
-	result = m.DB.Conn.Delete(&venue)
+	result = m.DB.Conn.Unscoped().Delete(&venue, venueId)
 
 	if result.Error != nil {
 		return 500, result.Error
