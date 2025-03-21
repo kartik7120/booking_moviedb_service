@@ -76,9 +76,3 @@ type Venue struct {
 	MovieTimeSlots []MovieTimeSlot `json:"movie_time_slots" gorm:"foreignKey:VenueID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Movies         []Movie         `json:"movies" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
-
-// Explicitly define the join table for the many-to-many relationship
-type MovieVenue struct {
-	MovieID uint `gorm:"primaryKey"`
-	VenueID uint `gorm:"primaryKey"`
-}
