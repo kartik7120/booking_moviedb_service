@@ -393,7 +393,7 @@ func (m *MoviedbService) DeleteMovie(ctx context.Context, in *moviedb.MovieReque
 
 // }
 
-func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieRequest) *moviedb.MovieResponse {
+func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieRequest) (*moviedb.MovieResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -402,7 +402,7 @@ func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieReque
 			Status:  408,
 			Message: "Context was cancelled",
 			Error:   ctx.Err().Error(),
-		}
+		}, ctx.Err()
 	}
 
 	Venueid, err := strconv.ParseUint(in.Venueid, 10, 32)
@@ -412,7 +412,7 @@ func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieReque
 			Status:  400,
 			Message: "Invalid venue ID",
 			Error:   err.Error(),
-		}
+		}, err
 	}
 
 	status, err := m.MovieDB.DeleteVenue(uint(Venueid))
@@ -422,16 +422,16 @@ func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieReque
 			Status:  int32(status),
 			Message: "error deleting venue",
 			Error:   err.Error(),
-		}
+		}, err
 	}
 
 	return &moviedb.MovieResponse{
 		Status:  int32(status),
 		Message: "Venue deleted",
-	}
+	}, nil
 }
 
-func (m *MoviedbService) UpdateVenue(ctx context.Context, in *moviedb.Venue) *moviedb.VenueResponse {
+func (m *MoviedbService) UpdateVenue(ctx context.Context, in *moviedb.Venue) (*moviedb.VenueResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -439,7 +439,7 @@ func (m *MoviedbService) UpdateVenue(ctx context.Context, in *moviedb.Venue) *mo
 		return &moviedb.VenueResponse{
 			Status:  500,
 			Message: "context is already cancelled",
-		}
+		}, ctx.Err()
 	}
 
 	v := models.Venue{
@@ -480,16 +480,16 @@ func (m *MoviedbService) UpdateVenue(ctx context.Context, in *moviedb.Venue) *mo
 			Status:  int32(status),
 			Message: "error updating venue",
 			Error:   err.Error(),
-		}
+		}, err
 	}
 
 	return &moviedb.VenueResponse{
 		Status:  200,
 		Message: "Updated venue",
-	}
+	}, nil
 }
 
-func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) *moviedb.VenueResponse {
+func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) (*moviedb.VenueResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -497,7 +497,7 @@ func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) *movie
 		return &moviedb.VenueResponse{
 			Status:  500,
 			Message: "context is already cancelled",
-		}
+		}, nil
 	}
 
 	venue := models.Venue{
@@ -513,9 +513,7 @@ func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) *movie
 
 	movieFormatSupported := make([]string, 0)
 
-	for _, val := range in.MovieFormatSupported {
-		movieFormatSupported = append(movieFormatSupported, val)
-	}
+	movieFormatSupported = append(movieFormatSupported, in.MovieFormatSupported...)
 
 	if len(movieFormatSupported) > 0 {
 		venue.MovieFormatSupported = movieFormatSupported
@@ -523,9 +521,7 @@ func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) *movie
 
 	languageSupported := make([]string, 0)
 
-	for _, val := range in.LanguageSupported {
-		languageSupported = append(languageSupported, val)
-	}
+	languageSupported = append(languageSupported, in.LanguageSupported...)
 
 	if len(languageSupported) > 0 {
 		venue.LanguagesSupported = languageSupported
@@ -557,16 +553,16 @@ func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) *movie
 			Status:  int32(status),
 			Message: "error adding a new venue",
 			Error:   err.Error(),
-		}
+		}, err
 	}
 
 	return &moviedb.VenueResponse{
 		Status:  int32(status),
 		Message: "added a new venue",
-	}
+	}, nil
 }
 
-func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest) *moviedb.VenueResponse {
+func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest) (*moviedb.VenueResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -574,7 +570,7 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 		return &moviedb.VenueResponse{
 			Status:  500,
 			Message: "context is already cancelled",
-		}
+		}, ctx.Err()
 	}
 
 	Venueid, err := strconv.ParseUint(in.Venueid, 10, 32)
@@ -583,7 +579,7 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 		return &moviedb.VenueResponse{
 			Status: 500,
 			Error:  err.Error(),
-		}
+		}, err
 	}
 
 	venue, status, err := m.MovieDB.GetVenue(uint(Venueid))
@@ -592,7 +588,7 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 		return &moviedb.VenueResponse{
 			Status:  int32(status),
 			Message: "error getting venue",
-		}
+		}, err
 	}
 
 	return &moviedb.VenueResponse{
@@ -604,6 +600,5 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 			Rows:    int32(venue.Rows),
 			Columns: int32(venue.Columns),
 		},
-	}
-
+	}, nil
 }
