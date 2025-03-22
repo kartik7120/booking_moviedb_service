@@ -41,10 +41,10 @@ type MovieDBServiceClient interface {
 	GetAllMovies(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*MovieListResponse, error)
 	UpdateMovie(ctx context.Context, in *Movie, opts ...grpc.CallOption) (*MovieResponse, error)
 	DeleteMovie(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*MovieResponse, error)
-	AddVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*MovieResponse, error)
-	GetVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*MovieResponse, error)
+	AddVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*VenueResponse, error)
+	GetVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*VenueResponse, error)
 	GetAllVenues(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*MovieListResponse, error)
-	UpdateVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*MovieResponse, error)
+	UpdateVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*VenueResponse, error)
 	DeleteVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*MovieResponse, error)
 }
 
@@ -106,9 +106,9 @@ func (c *movieDBServiceClient) DeleteMovie(ctx context.Context, in *MovieRequest
 	return out, nil
 }
 
-func (c *movieDBServiceClient) AddVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*MovieResponse, error) {
+func (c *movieDBServiceClient) AddVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*VenueResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MovieResponse)
+	out := new(VenueResponse)
 	err := c.cc.Invoke(ctx, MovieDBService_AddVenue_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -116,9 +116,9 @@ func (c *movieDBServiceClient) AddVenue(ctx context.Context, in *Venue, opts ...
 	return out, nil
 }
 
-func (c *movieDBServiceClient) GetVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*MovieResponse, error) {
+func (c *movieDBServiceClient) GetVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*VenueResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MovieResponse)
+	out := new(VenueResponse)
 	err := c.cc.Invoke(ctx, MovieDBService_GetVenue_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -136,9 +136,9 @@ func (c *movieDBServiceClient) GetAllVenues(ctx context.Context, in *emptypb.Emp
 	return out, nil
 }
 
-func (c *movieDBServiceClient) UpdateVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*MovieResponse, error) {
+func (c *movieDBServiceClient) UpdateVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*VenueResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MovieResponse)
+	out := new(VenueResponse)
 	err := c.cc.Invoke(ctx, MovieDBService_UpdateVenue_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -165,10 +165,10 @@ type MovieDBServiceServer interface {
 	GetAllMovies(context.Context, *emptypb.Empty) (*MovieListResponse, error)
 	UpdateMovie(context.Context, *Movie) (*MovieResponse, error)
 	DeleteMovie(context.Context, *MovieRequest) (*MovieResponse, error)
-	AddVenue(context.Context, *Venue) (*MovieResponse, error)
-	GetVenue(context.Context, *MovieRequest) (*MovieResponse, error)
+	AddVenue(context.Context, *Venue) (*VenueResponse, error)
+	GetVenue(context.Context, *MovieRequest) (*VenueResponse, error)
 	GetAllVenues(context.Context, *emptypb.Empty) (*MovieListResponse, error)
-	UpdateVenue(context.Context, *Venue) (*MovieResponse, error)
+	UpdateVenue(context.Context, *Venue) (*VenueResponse, error)
 	DeleteVenue(context.Context, *MovieRequest) (*MovieResponse, error)
 	mustEmbedUnimplementedMovieDBServiceServer()
 }
@@ -195,16 +195,16 @@ func (UnimplementedMovieDBServiceServer) UpdateMovie(context.Context, *Movie) (*
 func (UnimplementedMovieDBServiceServer) DeleteMovie(context.Context, *MovieRequest) (*MovieResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMovie not implemented")
 }
-func (UnimplementedMovieDBServiceServer) AddVenue(context.Context, *Venue) (*MovieResponse, error) {
+func (UnimplementedMovieDBServiceServer) AddVenue(context.Context, *Venue) (*VenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddVenue not implemented")
 }
-func (UnimplementedMovieDBServiceServer) GetVenue(context.Context, *MovieRequest) (*MovieResponse, error) {
+func (UnimplementedMovieDBServiceServer) GetVenue(context.Context, *MovieRequest) (*VenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVenue not implemented")
 }
 func (UnimplementedMovieDBServiceServer) GetAllVenues(context.Context, *emptypb.Empty) (*MovieListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllVenues not implemented")
 }
-func (UnimplementedMovieDBServiceServer) UpdateVenue(context.Context, *Venue) (*MovieResponse, error) {
+func (UnimplementedMovieDBServiceServer) UpdateVenue(context.Context, *Venue) (*VenueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateVenue not implemented")
 }
 func (UnimplementedMovieDBServiceServer) DeleteVenue(context.Context, *MovieRequest) (*MovieResponse, error) {

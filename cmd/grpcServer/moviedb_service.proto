@@ -100,6 +100,9 @@ message Venue {
     repeated SeatMatrix seats = 9;
     repeated MovieTimeSlot movie_time_slots = 10;
     repeated Movie movies = 11;
+    int32 id = 12;
+    repeated string movie_format_supported = 13;
+    repeated string language_supported = 14;
 }
 
 message MovieList {
@@ -126,15 +129,22 @@ message MovieListResponse {
     string error = 4;
 }
 
+message VenueResponse {
+    int32 status = 1;
+    string message = 2;
+    Venue Venue = 3;
+    string error = 4;
+}
+
 service MovieDBService {
     rpc AddMovie (Movie) returns (MovieResponse);
     rpc GetMovie (MovieRequest) returns (MovieResponse);
     rpc GetAllMovies (google.protobuf.Empty) returns (MovieListResponse);
     rpc UpdateMovie (Movie) returns (MovieResponse);
     rpc DeleteMovie (MovieRequest) returns (MovieResponse);
-    rpc AddVenue (Venue) returns (MovieResponse);
-    rpc GetVenue (MovieRequest) returns (MovieResponse);
+    rpc AddVenue (Venue) returns (VenueResponse);
+    rpc GetVenue (MovieRequest) returns (VenueResponse);
     rpc GetAllVenues (google.protobuf.Empty) returns (MovieListResponse);
-    rpc UpdateVenue (Venue) returns (MovieResponse);
+    rpc UpdateVenue (Venue) returns (VenueResponse);
     rpc DeleteVenue (MovieRequest) returns (MovieResponse);
 }
