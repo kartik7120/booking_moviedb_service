@@ -124,45 +124,54 @@ func TestMovieDB(t *testing.T) {
 		// }
 
 		movie := models.Movie{
-			Title:           "Blade Runner 2049",
-			Description:     "A young blade runner's discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who's been missing for thirty years.",
-			ReleaseDate:     releaseDate, // Release Date: October 6, 2017
-			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
-			Duration:        164, // 2 hours 44 minutes
-			Language:        pq.StringArray([]string{"English", "Spanish", "French"}),
-			Type:            pq.StringArray([]string{"Science Fiction", "Drama", "Thriller"}),
+			Title:           "The Lord of the Rings: The Fellowship of the Ring",
+			Description:     "A young hobbit, Frodo Baggins, embarks on a journey to destroy the One Ring and defeat the Dark Lord Sauron.",
+			ReleaseDate:     releaseDate,
+			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+			Duration:        178, // 2 hours 58 minutes
+			Language:        pq.StringArray([]string{"English", "Elvish", "Dwarvish"}),
+			Type:            pq.StringArray([]string{"Fantasy", "Adventure", "Drama"}),
 			MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+			CastCrew: []models.CastAndCrew{
+				{Type: "Cast", Name: "Elijah Wood", Character: "Frodo Baggins", PhotoURL: "https://example.com/elijah_wood.jpg"},
+				{Type: "Cast", Name: "Ian McKellen", Character: "Gandalf", PhotoURL: "https://example.com/ian_mckellen.jpg"},
+				{Type: "Cast", Name: "Viggo Mortensen", Character: "Aragorn", PhotoURL: "https://example.com/viggo_mortensen.jpg"},
+				{Type: "Cast", Name: "Sean Astin", Character: "Samwise Gamgee", PhotoURL: "https://example.com/sean_astin.jpg"},
+				{Type: "Crew", Name: "Peter Jackson", Character: "Director", PhotoURL: "https://example.com/peter_jackson.jpg"},
+			},
 			Venues: []models.Venue{
 				{
-					Name:      "IMAX - Grand Cinema",
-					Type:      "IMAX",
-					Address:   "Grand Mall, Downtown, Los Angeles, CA 90012",
-					Latitude:  34.0522,
-					Longitude: -118.2437,
-					Rows:      15,
-					Columns:   20,
-					// Seats: []models.SeatMatrix{
-					// 	{Row: 1, Column: 1, Price: 1200, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
-					// 	{Row: 1, Column: 2, Price: 1200, SeatNumber: "A2", IsBooked: false, Type: "Platinum"},
-					// 	{Row: 2, Column: 1, Price: 1000, SeatNumber: "B1", IsBooked: true, Type: "Gold"},
-					// 	{Row: 2, Column: 2, Price: 1000, SeatNumber: "B2", IsBooked: false, Type: "Gold"},
-					// },
-					LanguagesSupported:   pq.StringArray([]string{"English", "Spanish"}),
+					Name:                 "Rivendell Grand Theater",
+					Type:                 "IMAX",
+					Address:              "123 Elven Road, Middle-earth",
+					Latitude:             40.7128,
+					Longitude:            -74.0060,
+					Rows:                 20,
+					Columns:              30,
 					ScreenNumber:         1,
 					MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
+					LanguagesSupported:   pq.StringArray([]string{"English", "Elvish"}),
+
+					// Seats: []models.SeatMatrix{
+					// 	{Row: 1, Column: 1, Price: 1500, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
+					// 	{Row: 1, Column: 2, Price: 1500, SeatNumber: "A2", IsBooked: true, Type: "Platinum"},
+					// 	{Row: 2, Column: 1, Price: 1200, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
+					// 	{Row: 2, Column: 2, Price: 1200, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
+					// },
+
 					// MovieTimeSlots: []models.MovieTimeSlot{
 					// 	{
-					// 		StartTime:   "18:00", // 6:00 PM
-					// 		EndTime:     "21:00", // 9:00 PM
-					// 		Duration:    10800,   // 3 hours
-					// 		Date:        time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC),
+					// 		StartTime:   "16:00", // 4:00 PM
+					// 		EndTime:     "19:00", // 7:00 PM
+					// 		Duration:    180,     // 3 hours
+					// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
 					// 		MovieFormat: "IMAX",
 					// 	},
 					// 	{
-					// 		StartTime:   "21:30", // 9:30 PM
-					// 		EndTime:     "00:30", // 12:30 AM
-					// 		Duration:    10800,   // 3 hours
-					// 		Date:        time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC),
+					// 		StartTime:   "20:00", // 8:00 PM
+					// 		EndTime:     "23:00", // 11:00 PM
+					// 		Duration:    180,     // 3 hours
+					// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
 					// 		MovieFormat: "3D",
 					// 	},
 					// },
@@ -172,15 +181,24 @@ func TestMovieDB(t *testing.T) {
 
 		_, status, err := m.AddMovie(movie, []models.MovieTimeSlot{
 			{
-				StartTime:   "1742155000",
-				EndTime:     "1742165000",
-				Duration:    7200, // 2 hours
+				StartTime:   "16:00", // 4:00 PM
+				EndTime:     "19:00", // 7:00 PM
+				Duration:    180,     // 3 hours
 				Date:        movieTimeSlotDate,
-				MovieFormat: "4DX",
+				MovieFormat: "IMAX",
+			},
+			{
+				StartTime:   "20:00", // 8:00 PM
+				EndTime:     "23:00", // 11:00 PM
+				Duration:    180,     // 3 hours
+				Date:        movieTimeSlotDate,
+				MovieFormat: "3D",
 			},
 		}, []models.SeatMatrix{
-			{Row: 1, Column: 1, Price: 700, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
-			{Row: 1, Column: 2, Price: 700, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
+			{Row: 1, Column: 1, Price: 1500, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
+			{Row: 1, Column: 2, Price: 1500, SeatNumber: "A2", IsBooked: true, Type: "Platinum"},
+			{Row: 2, Column: 1, Price: 1200, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
+			{Row: 2, Column: 2, Price: 1200, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
 		})
 
 		if err != nil {

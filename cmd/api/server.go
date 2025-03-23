@@ -7,6 +7,7 @@ import (
 
 	moviedb "github.com/kartik7120/booking_moviedb_service/cmd/grpcServer"
 	"github.com/kartik7120/booking_moviedb_service/cmd/models"
+	log "github.com/sirupsen/logrus"
 )
 
 // var validate *validator.Validate
@@ -26,13 +27,13 @@ func (m *MoviedbService) AddMovie(ctx context.Context, in *moviedb.Movie) (*movi
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.MovieResponse{
-			Status:  408,
-			Message: "Context was cancelled",
-			Error:   "",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.MovieResponse{
+	// 		Status:  408,
+	// 		Message: "Context was cancelled",
+	// 		Error:   "",
+	// 	}, ctx.Err()
+	// }
 
 	castAndCrew := make([]models.CastAndCrew, 0)
 
@@ -138,20 +139,23 @@ func (m *MoviedbService) AddMovie(ctx context.Context, in *moviedb.Movie) (*movi
 
 func (m *MoviedbService) GetMovie(ctx context.Context, in *moviedb.MovieRequest) (*moviedb.MovieResponse, error) {
 
+	log.Info("Starting gRPC GetMovie function call")
+
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.MovieResponse{
-			Status:  408,
-			Message: "Context was cancelled",
-			Error:   "",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.MovieResponse{
+	// 		Status:  408,
+	// 		Message: "Context was cancelled",
+	// 		Error:   "",
+	// 	}, ctx.Err()
+	// }
 
 	movieID, err := strconv.ParseUint(in.Movieid, 10, 32)
 
 	if err != nil {
+		log.Error("Invalid movie id", err)
 		return &moviedb.MovieResponse{
 			Status:  400,
 			Message: "Invalid movie ID",
@@ -162,10 +166,11 @@ func (m *MoviedbService) GetMovie(ctx context.Context, in *moviedb.MovieRequest)
 	movie, status, err := m.MovieDB.GetMovieDetails(uint(movieID))
 
 	if err != nil {
+		log.Info("error calling get movie details function", err)
 		return &moviedb.MovieResponse{
 			Status:  int32(status),
 			Message: "Movie not found",
-			Error:   "",
+			Error:   err.Error(),
 		}, nil
 	}
 
@@ -205,13 +210,13 @@ func (m *MoviedbService) UpdateMovie(ctx context.Context, in *moviedb.Movie) (*m
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.MovieResponse{
-			Status:  408,
-			Message: "Context was cancelled",
-			Error:   "",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.MovieResponse{
+	// 		Status:  408,
+	// 		Message: "Context was cancelled",
+	// 		Error:   "",
+	// 	}, ctx.Err()
+	// }
 
 	castAndCrew := make([]models.CastAndCrew, 0)
 
@@ -274,13 +279,13 @@ func (m *MoviedbService) DeleteMovie(ctx context.Context, in *moviedb.MovieReque
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.MovieResponse{
-			Status:  408,
-			Message: "Context was cancelled",
-			Error:   "",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.MovieResponse{
+	// 		Status:  408,
+	// 		Message: "Context was cancelled",
+	// 		Error:   "",
+	// 	}, ctx.Err()
+	// }
 
 	movieID, err := strconv.ParseUint(in.Movieid, 10, 32)
 
@@ -309,101 +314,17 @@ func (m *MoviedbService) DeleteMovie(ctx context.Context, in *moviedb.MovieReque
 	}, nil
 }
 
-// func (m MoviedbService) GetMovies(ctx context.Context, in *moviedb.MovieRequest) (*moviedb.MoviesResponse, error) {
-
-// 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-// 	defer cancel()
-
-// 	if ctx.Done() != nil {
-// 		return &moviedb.MoviesResponse{
-// 			Status:  408,
-// 			Message: "Context was cancelled",
-// 			Error:   "",
-// 		}, ctx.Err()
-// 	}
-
-// 	movies, status, err := m.MovieDB.GetMovies()
-
-// 	if err != nil {
-// 		return &moviedb.MoviesResponse{
-// 			Status:  int32(status),
-// 			Message: "No movies found",
-// 			Error:   "",
-// 		}, nil
-// 	}
-
-// 	moviesResponse := make([]*moviedb.Movie, 0)
-
-// 	for _, movie := range movies {
-// 		castCrew := make([]*moviedb.CastAndCrew, 0)
-
-// 		for _, cc := range movie.CastCrew {
-// 			c := &moviedb.CastAndCrew{
-// 				Type:          moviedb.CastAndCrewType(moviedb.CastAndCrewType_value[cc.Type]),
-// 				Name:          cc.Name,
-// 				CharacterName: cc.Character,
-// 				Photourl:      cc.PhotoURL,
-// 			}
-// 			castCrew = append(castCrew, c)
-// 		}
-
-// 		venues := make([]*moviedb.Venue, 0)
-
-// 		for _, v := range movie.Venues {
-// 			movies := make([]*moviedb.Movie, 0)
-// 			for _, vm := range v.Movies {
-// 				m := &moviedb.Movie{
-// 					Title:           vm.Title,
-// 					Description:     vm.Description,
-// 					Duration:        int32(vm.Duration),
-// 					Language:        vm.Language,
-// 					Type:            vm.Type,
-// 					CastCrew:        castCrew, // Assuming same cast and crew for simplicity
-// 					PosterUrl:       vm.PosterURL,
-// 					TrailerUrl:      vm.TrailerURL,
-// 					ReleaseDate:     vm.ReleaseDate,
-// 					MovieResolution: vm.MovieResolution,
-// 				}
-// 				movies = append(movies, m)
-// 			}
-// 		}
-
-// 		moviesResponse = append(moviesResponse, &moviedb.Movie{
-// 			Title:           movie.Title,
-// 			Description:     movie.Description,
-// 			Duration:        int32(movie.Duration),
-// 			Language:        movie.Language,
-// 			Type:            movie.Type,
-// 			CastCrew:        castCrew,
-// 			PosterUrl:       movie.PosterURL,
-// 			TrailerUrl:      movie.TrailerURL,
-// 			ReleaseDate:     movie.ReleaseDate,
-// 			MovieResolution: movie.MovieResolution,
-// 			Venues:          venues,
-// 		})
-
-// 	}
-
-// 	return &moviedb.MovieResponse{
-// 		Status:  200,
-// 		Message: "Movies found",
-// 		Error:   "",
-// 		Movie:  moviesResponse,
-// 	}, nil
-
-// }
-
 func (m *MoviedbService) DeleteVenue(ctx context.Context, in *moviedb.MovieRequest) (*moviedb.MovieResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.MovieResponse{
-			Status:  408,
-			Message: "Context was cancelled",
-			Error:   ctx.Err().Error(),
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.MovieResponse{
+	// 		Status:  408,
+	// 		Message: "Context was cancelled",
+	// 		Error:   ctx.Err().Error(),
+	// 	}, ctx.Err()
+	// }
 
 	Venueid, err := strconv.ParseUint(in.Venueid, 10, 32)
 
@@ -435,12 +356,12 @@ func (m *MoviedbService) UpdateVenue(ctx context.Context, in *moviedb.Venue) (*m
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.VenueResponse{
-			Status:  500,
-			Message: "context is already cancelled",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.VenueResponse{
+	// 		Status:  500,
+	// 		Message: "context is already cancelled",
+	// 	}, ctx.Err()
+	// }
 
 	v := models.Venue{
 		Name:         in.Name,
@@ -493,12 +414,12 @@ func (m *MoviedbService) AddVenue(ctx context.Context, in *moviedb.Venue) (*movi
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.VenueResponse{
-			Status:  500,
-			Message: "context is already cancelled",
-		}, nil
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.VenueResponse{
+	// 		Status:  500,
+	// 		Message: "context is already cancelled",
+	// 	}, nil
+	// }
 
 	venue := models.Venue{
 		Name:         in.Name,
@@ -566,12 +487,12 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if ctx.Done() != nil {
-		return &moviedb.VenueResponse{
-			Status:  500,
-			Message: "context is already cancelled",
-		}, ctx.Err()
-	}
+	// if ctx.Done() != nil {
+	// 	return &moviedb.VenueResponse{
+	// 		Status:  500,
+	// 		Message: "context is already cancelled",
+	// 	}, ctx.Err()
+	// }
 
 	Venueid, err := strconv.ParseUint(in.Venueid, 10, 32)
 
