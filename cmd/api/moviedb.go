@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/kartik7120/booking_moviedb_service/cmd/helper"
@@ -261,4 +262,45 @@ func (m *MovieDB) GetVenue(venueId uint) (models.Venue, int, error) {
 	}
 
 	return venue, 200, nil
+}
+
+// Used to fetch upcoming movies based on the range date given by user,starting from date + 2 weeks to date + 2 weeks + 1 month
+func (m *MovieDB) GetUpcomingMovies(date string) ([]models.Movie, int, error) {
+	// Parse the input date
+	d, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return nil, 400, err
+	}
+
+	// Calculate start and end dates
+	startDate := d.AddDate(0, 0, 14)
+	endDate := d.AddDate(0, 1, 14)
+
+	// Query the database
+	var movies []models.Movie
+	result := m.DB.Conn.Table("movies").Where("release_date BETWEEN ? AND ?", startDate, endDate).Find(&movies)
+
+	if result.Error != nil {
+		return nil, 500, result.Error
+	}
+
+	// Return the movies
+	return movies, 200, nil
+}
+
+func (m *MovieDB) GetNowPlayingMovies() ([]models.Movie, int, error) {
+	today := time.Now().Truncate(24 * time.Hour)
+
+	var movies []models.Movie
+	err := m.DB.Conn.
+		Joins("JOIN movie_time_slots mts ON mts.movie_id = movies.id").
+		Where("movies.release_date <= ?", today).
+		Where("DATE(mts.date) = ?", today).
+		Group("movies.id").
+		Find(&movies).Error
+
+	if err != nil {
+		return nil, 500, err
+	}
+	return movies, 200, nil
 }

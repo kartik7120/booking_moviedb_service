@@ -127,7 +127,16 @@ func (m *MoviedbService) AddMovie(ctx context.Context, in *moviedb.Movie) (*movi
 		Venues:          venues,
 	}
 
-	m.MovieDB.AddMovie(movie, movieTimeSlots, seats)
+	_, status, err := m.MovieDB.AddMovie(movie, movieTimeSlots, seats)
+
+	if err != nil {
+		return &moviedb.MovieResponse{
+			Status:  int32(status),
+			Message: "error adding movie",
+			Movie:   in,
+			Error:   "",
+		}, err
+	}
 
 	return &moviedb.MovieResponse{
 		Status:  200,
@@ -521,5 +530,108 @@ func (m *MoviedbService) GetVenue(ctx context.Context, in *moviedb.MovieRequest)
 			Rows:    int32(venue.Rows),
 			Columns: int32(venue.Columns),
 		},
+	}, nil
+}
+
+func (m *MoviedbService) GetUpcomingMovies(ctx context.Context, in *moviedb.GetUpcomingMovieRequest) (*moviedb.GetUpcomingMovieResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	movies, status, err := m.MovieDB.GetUpcomingMovies(in.Date)
+
+	if status != 200 {
+		return &moviedb.GetUpcomingMovieResponse{
+			Status:    int32(status),
+			Message:   "error getting upcoming movies",
+			MovieList: nil,
+			Error:     err.Error(),
+		}, nil
+	}
+
+	if err != nil {
+		return &moviedb.GetUpcomingMovieResponse{
+			Status:    int32(status),
+			Message:   "error getting upcoming movies",
+			MovieList: nil,
+			Error:     err.Error(),
+		}, nil
+	}
+
+	movielist := make([]*moviedb.Movie, 0)
+
+	for _, v := range movies {
+		movielist = append(movielist, &moviedb.Movie{
+			Title:           v.Title,
+			Description:     v.Description,
+			Duration:        int32(v.Duration),
+			Language:        v.Language,
+			Type:            v.Type,
+			PosterUrl:       v.PosterURL,
+			TrailerUrl:      v.TrailerURL,
+			ReleaseDate:     v.ReleaseDate.Local().String(),
+			MovieResolution: v.MovieResolution,
+			Movieid:         string(v.ID),
+			Votes:           int64(v.Votes),
+			Ranking:         int32(v.Ranking),
+		})
+	}
+
+	return &moviedb.GetUpcomingMovieResponse{
+		Status:    200,
+		Message:   "Success",
+		MovieList: movielist,
+		Error:     "",
+	}, nil
+
+}
+
+func (m *MoviedbService) GetNowPlayingMovies(ctx context.Context, in *moviedb.GetUpcomingMovieRequest) (*moviedb.GetUpcomingMovieResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	movies, status, err := m.MovieDB.GetNowPlayingMovies()
+
+	if status != 200 {
+		return &moviedb.GetUpcomingMovieResponse{
+			Status:    int32(status),
+			Message:   "error getting now playing movies",
+			MovieList: nil,
+			Error:     err.Error(),
+		}, nil
+	}
+
+	if err != nil {
+		return &moviedb.GetUpcomingMovieResponse{
+			Status:    int32(status),
+			Message:   "error getting now playing movies",
+			MovieList: nil,
+			Error:     err.Error(),
+		}, nil
+	}
+
+	movielist := make([]*moviedb.Movie, 0)
+
+	for _, v := range movies {
+		movielist = append(movielist, &moviedb.Movie{
+			Title:           v.Title,
+			Description:     v.Description,
+			Duration:        int32(v.Duration),
+			Language:        v.Language,
+			Type:            v.Type,
+			PosterUrl:       v.PosterURL,
+			TrailerUrl:      v.TrailerURL,
+			ReleaseDate:     v.ReleaseDate.Local().String(),
+			MovieResolution: v.MovieResolution,
+			Movieid:         string(v.ID),
+			Votes:           int64(v.Votes),
+			Ranking:         int32(v.Ranking),
+		})
+	}
+
+	return &moviedb.GetUpcomingMovieResponse{
+		Status:    200,
+		Message:   "Success",
+		MovieList: movielist,
+		Error:     "",
 	}, nil
 }
