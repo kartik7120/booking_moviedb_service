@@ -36,7 +36,7 @@ func TestMovieDB(t *testing.T) {
 
 		m.DB.Conn = conn
 
-		releaseDate, err := time.Parse("2006-01-02", "2022-03-04")
+		_, err = time.Parse("2006-01-02", "2022-03-04")
 
 		if err != nil {
 			t.Errorf("error parsing release date")
@@ -51,7 +51,6 @@ func TestMovieDB(t *testing.T) {
 		}
 
 		// add movie to database
-
 		// movie := models.Movie{
 		// 	Title:       "The Batman",
 		// 	Description: "The Batman is an upcoming American superhero film based on the DC Comics character Batman.",
@@ -123,58 +122,264 @@ func TestMovieDB(t *testing.T) {
 		// 	},
 		// }
 
+		// movie := models.Movie{
+		// 	Title:           "The Lord of the Rings: The Fellowship of the Ring",
+		// 	Description:     "A young hobbit, Frodo Baggins, embarks on a journey to destroy the One Ring and defeat the Dark Lord Sauron.",
+		// 	ReleaseDate:     releaseDate,
+		// 	PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
+		// 	Duration:        178, // 2 hours 58 minutes
+		// 	Language:        pq.StringArray([]string{"English", "Elvish", "Dwarvish"}),
+		// 	Type:            pq.StringArray([]string{"Fantasy", "Adventure", "Drama"}),
+		// 	MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Elijah Wood", Character: "Frodo Baggins", PhotoURL: "https://example.com/elijah_wood.jpg"},
+		// 		{Type: "Cast", Name: "Ian McKellen", Character: "Gandalf", PhotoURL: "https://example.com/ian_mckellen.jpg"},
+		// 		{Type: "Cast", Name: "Viggo Mortensen", Character: "Aragorn", PhotoURL: "https://example.com/viggo_mortensen.jpg"},
+		// 		{Type: "Cast", Name: "Sean Astin", Character: "Samwise Gamgee", PhotoURL: "https://example.com/sean_astin.jpg"},
+		// 		{Type: "Crew", Name: "Peter Jackson", Character: "Director", PhotoURL: "https://example.com/peter_jackson.jpg"},
+		// 	},
+		// 	Ranking: 23,
+		// 	Votes:   1002,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Rivendell Grand Theater",
+		// 			Type:                 "IMAX",
+		// 			Address:              "123 Elven Road, Middle-earth",
+		// 			Latitude:             40.7128,
+		// 			Longitude:            -74.0060,
+		// 			Rows:                 20,
+		// 			Columns:              30,
+		// 			ScreenNumber:         1,
+		// 			MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English", "Elvish"}),
+
+		// 			// Seats: []models.SeatMatrix{
+		// 			// 	{Row: 1, Column: 1, Price: 1500, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
+		// 			// 	{Row: 1, Column: 2, Price: 1500, SeatNumber: "A2", IsBooked: true, Type: "Platinum"},
+		// 			// 	{Row: 2, Column: 1, Price: 1200, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
+		// 			// 	{Row: 2, Column: 2, Price: 1200, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
+		// 			// },
+
+		// 			// MovieTimeSlots: []models.MovieTimeSlot{
+		// 			// 	{
+		// 			// 		StartTime:   "16:00", // 4:00 PM
+		// 			// 		EndTime:     "19:00", // 7:00 PM
+		// 			// 		Duration:    180,     // 3 hours
+		// 			// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "IMAX",
+		// 			// 	},
+		// 			// 	{
+		// 			// 		StartTime:   "20:00", // 8:00 PM
+		// 			// 		EndTime:     "23:00", // 11:00 PM
+		// 			// 		Duration:    180,     // 3 hours
+		// 			// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "3D",
+		// 			// 	},
+		// 			// },
+		// 		},
+		// 	},
+		// }
+
+		// movie := models.Movie{
+		// 	Title:           "The Batman",
+		// 	Description:     "Batman ventures into Gotham City's underworld when a sadistic killer leaves behind a trail of cryptic clues.",
+		// 	ReleaseDate:     time.Date(2025, 5, 4, 0, 0, 0, 0, time.UTC),
+		// 	PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+		// 	Duration:        176, // 2 hours 56 minutes
+		// 	Language:        pq.StringArray([]string{"English"}),
+		// 	Type:            pq.StringArray([]string{"Action", "Crime", "Drama"}),
+		// 	MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Robert Pattinson", Character: "Bruce Wayne / Batman", PhotoURL: "https://example.com/robert_pattinson.jpg"},
+		// 		{Type: "Cast", Name: "Zoë Kravitz", Character: "Selina Kyle / Catwoman", PhotoURL: "https://example.com/zoe_kravitz.jpg"},
+		// 		{Type: "Cast", Name: "Paul Dano", Character: "Edward Nashton / Riddler", PhotoURL: "https://example.com/paul_dano.jpg"},
+		// 		{Type: "Crew", Name: "Matt Reeves", Character: "Director", PhotoURL: "https://example.com/matt_reeves.jpg"},
+		// 	},
+		// 	Ranking: 45,
+		// 	Votes:   1200,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Gotham Cineplex",
+		// 			Type:                 "IMAX",
+		// 			Address:              "200 Dark Alley, Gotham City",
+		// 			Latitude:             40.7128,
+		// 			Longitude:            -74.0060,
+		// 			Rows:                 25,
+		// 			Columns:              35,
+		// 			ScreenNumber:         2,
+		// 			MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English"}),
+
+		// 			// MovieTimeSlots
+		// 			MovieTimeSlots: []models.MovieTimeSlot{
+		// 				{
+		// 					StartTime:   "18:00", // 6:00 PM
+		// 					EndTime:     "21:00", // 9:00 PM
+		// 					Duration:    180,     // 3 hours
+		// 					Date:        time.Date(2025, 5, 4, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "IMAX",
+		// 				},
+		// 				{
+		// 					StartTime:   "22:00", // 10:00 PM
+		// 					EndTime:     "01:00", // 1:00 AM
+		// 					Duration:    180,     // 3 hours
+		// 					Date:        time.Date(2025, 5, 4, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "3D",
+		// 				},
+		// 			},
+		// 		},
+		// 	},
+		// }
+
+		// movie := models.Movie{
+		// 	Title:           "Blade Runner 2049",
+		// 	Description:     "A young blade runner's discovery of a long-buried secret leads him to track down former blade runner Rick Deckard, who's been missing for thirty years.",
+		// 	ReleaseDate:     time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC),
+		// 	PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg",
+		// 	Duration:        164, // 2 hours 44 minutes
+		// 	Language:        pq.StringArray([]string{"English"}),
+		// 	Type:            pq.StringArray([]string{"Science Fiction", "Drama", "Mystery"}),
+		// 	MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Ryan Gosling", Character: "K", PhotoURL: "https://example.com/ryan_gosling.jpg"},
+		// 		{Type: "Cast", Name: "Harrison Ford", Character: "Rick Deckard", PhotoURL: "https://example.com/harrison_ford.jpg"},
+		// 		{Type: "Cast", Name: "Ana de Armas", Character: "Joi", PhotoURL: "https://example.com/ana_de_armas.jpg"},
+		// 		{Type: "Crew", Name: "Denis Villeneuve", Character: "Director", PhotoURL: "https://example.com/denis_villeneuve.jpg"},
+		// 	},
+		// 	Ranking: 38,
+		// 	Votes:   950,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Neo Los Angeles Cinema",
+		// 			Type:                 "Dolby Atmos",
+		// 			Address:              "2049 Cyber Street, Los Angeles",
+		// 			Latitude:             34.0522,
+		// 			Longitude:            -118.2437,
+		// 			Rows:                 18,
+		// 			Columns:              28,
+		// 			ScreenNumber:         3,
+		// 			MovieFormatSupported: pq.StringArray([]string{"Dolby Atmos", "IMAX", "2D"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English"}),
+
+		// 			// MovieTimeSlots
+		// 			MovieTimeSlots: []models.MovieTimeSlot{
+		// 				{
+		// 					StartTime:   "17:00", // 5:00 PM
+		// 					EndTime:     "20:00", // 8:00 PM
+		// 					Duration:    180,     // 3 hours
+		// 					Date:        time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "Dolby Atmos",
+		// 				},
+		// 				{
+		// 					StartTime:   "21:00", // 9:00 PM
+		// 					EndTime:     "00:00", // Midnight
+		// 					Duration:    180,     // 3 hours
+		// 					Date:        time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "IMAX",
+		// 				},
+		// 			},
+		// 		},
+		// 	},
+		// }
+
+		// movie := models.Movie{
+		// 	Title:           "Spider-Man 2",
+		// 	Description:     "Peter Parker struggles to balance his personal life and his responsibilities as Spider-Man while facing the formidable Doctor Octopus.",
+		// 	ReleaseDate:     time.Date(2025, 4, 15, 0, 0, 0, 0, time.UTC),
+		// 	PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/olxpyq9kJAZ2NU1siLshhhXEPR7.jpg",
+		// 	Duration:        127, // 2 hours 7 minutes
+		// 	Language:        pq.StringArray([]string{"English"}),
+		// 	Type:            pq.StringArray([]string{"Action", "Adventure", "Sci-Fi"}),
+		// 	MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Tobey Maguire", Character: "Peter Parker / Spider-Man", PhotoURL: "https://example.com/tobey_maguire.jpg"},
+		// 		{Type: "Cast", Name: "Kirsten Dunst", Character: "Mary Jane Watson", PhotoURL: "https://example.com/kirsten_dunst.jpg"},
+		// 		{Type: "Cast", Name: "Alfred Molina", Character: "Dr. Otto Octavius / Doc Ock", PhotoURL: "https://example.com/alfred_molina.jpg"},
+		// 		{Type: "Crew", Name: "Sam Raimi", Character: "Director", PhotoURL: "https://example.com/sam_raimi.jpg"},
+		// 	},
+		// 	Ranking: 32,
+		// 	Votes:   1100,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Queens Cineplex",
+		// 			Type:                 "IMAX",
+		// 			Address:              "20 Parker Street, New York City",
+		// 			Latitude:             40.7306,
+		// 			Longitude:            -73.9352,
+		// 			Rows:                 22,
+		// 			Columns:              32,
+		// 			ScreenNumber:         4,
+		// 			MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English"}),
+
+		// 			// MovieTimeSlots
+		// 			MovieTimeSlots: []models.MovieTimeSlot{
+		// 				{
+		// 					StartTime:   "15:00", // 3:00 PM
+		// 					EndTime:     "17:30", // 5:30 PM
+		// 					Duration:    150,     // 2 hours 30 minutes
+		// 					Date:        time.Date(2025, 4, 15, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "IMAX",
+		// 				},
+		// 				{
+		// 					StartTime:   "19:00", // 7:00 PM
+		// 					EndTime:     "21:30", // 9:30 PM
+		// 					Duration:    150,     // 2 hours 30 minutes
+		// 					Date:        time.Date(2025, 4, 15, 0, 0, 0, 0, time.UTC),
+		// 					MovieFormat: "3D",
+		// 				},
+		// 			},
+		// 		},
+		// 	},
+		// }
+
 		movie := models.Movie{
-			Title:           "The Lord of the Rings: The Fellowship of the Ring",
-			Description:     "A young hobbit, Frodo Baggins, embarks on a journey to destroy the One Ring and defeat the Dark Lord Sauron.",
-			ReleaseDate:     releaseDate,
-			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
-			Duration:        178, // 2 hours 58 minutes
-			Language:        pq.StringArray([]string{"English", "Elvish", "Dwarvish"}),
-			Type:            pq.StringArray([]string{"Fantasy", "Adventure", "Drama"}),
+			Title:           "John Wick: Chapter 4",
+			Description:     "John Wick uncovers a path to defeating The High Table, but before he can earn his freedom, he must face a new enemy with powerful alliances across the globe.",
+			ReleaseDate:     time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
+			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg",
+			Duration:        169, // 2 hours 49 minutes
+			Language:        pq.StringArray([]string{"English", "French", "Japanese"}),
+			Type:            pq.StringArray([]string{"Action", "Thriller", "Crime"}),
 			MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
 			CastCrew: []models.CastAndCrew{
-				{Type: "Cast", Name: "Elijah Wood", Character: "Frodo Baggins", PhotoURL: "https://example.com/elijah_wood.jpg"},
-				{Type: "Cast", Name: "Ian McKellen", Character: "Gandalf", PhotoURL: "https://example.com/ian_mckellen.jpg"},
-				{Type: "Cast", Name: "Viggo Mortensen", Character: "Aragorn", PhotoURL: "https://example.com/viggo_mortensen.jpg"},
-				{Type: "Cast", Name: "Sean Astin", Character: "Samwise Gamgee", PhotoURL: "https://example.com/sean_astin.jpg"},
-				{Type: "Crew", Name: "Peter Jackson", Character: "Director", PhotoURL: "https://example.com/peter_jackson.jpg"},
+				{Type: "Cast", Name: "Keanu Reeves", Character: "John Wick", PhotoURL: "https://example.com/keanu_reeves.jpg"},
+				{Type: "Cast", Name: "Donnie Yen", Character: "Caine", PhotoURL: "https://example.com/donnie_yen.jpg"},
+				{Type: "Cast", Name: "Bill Skarsgård", Character: "Marquis", PhotoURL: "https://example.com/bill_skarsgard.jpg"},
+				{Type: "Crew", Name: "Chad Stahelski", Character: "Director", PhotoURL: "https://example.com/chad_stahelski.jpg"},
 			},
+			Ranking: 15,
+			Votes:   1200,
 			Venues: []models.Venue{
 				{
-					Name:                 "Rivendell Grand Theater",
-					Type:                 "IMAX",
-					Address:              "123 Elven Road, Middle-earth",
+					Name:                 "Continental Grand Cinema",
+					Type:                 "Dolby Atmos",
+					Address:              "1 High Table Avenue, New York City",
 					Latitude:             40.7128,
 					Longitude:            -74.0060,
-					Rows:                 20,
-					Columns:              30,
-					ScreenNumber:         1,
-					MovieFormatSupported: pq.StringArray([]string{"IMAX", "3D", "2D"}),
-					LanguagesSupported:   pq.StringArray([]string{"English", "Elvish"}),
+					Rows:                 25,
+					Columns:              35,
+					ScreenNumber:         5,
+					MovieFormatSupported: pq.StringArray([]string{"Dolby Atmos", "IMAX", "2D"}),
+					LanguagesSupported:   pq.StringArray([]string{"English", "French"}),
 
-					// Seats: []models.SeatMatrix{
-					// 	{Row: 1, Column: 1, Price: 1500, SeatNumber: "A1", IsBooked: false, Type: "Platinum"},
-					// 	{Row: 1, Column: 2, Price: 1500, SeatNumber: "A2", IsBooked: true, Type: "Platinum"},
-					// 	{Row: 2, Column: 1, Price: 1200, SeatNumber: "B1", IsBooked: false, Type: "Gold"},
-					// 	{Row: 2, Column: 2, Price: 1200, SeatNumber: "B2", IsBooked: true, Type: "Gold"},
-					// },
-
-					// MovieTimeSlots: []models.MovieTimeSlot{
-					// 	{
-					// 		StartTime:   "16:00", // 4:00 PM
-					// 		EndTime:     "19:00", // 7:00 PM
-					// 		Duration:    180,     // 3 hours
-					// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
-					// 		MovieFormat: "IMAX",
-					// 	},
-					// 	{
-					// 		StartTime:   "20:00", // 8:00 PM
-					// 		EndTime:     "23:00", // 11:00 PM
-					// 		Duration:    180,     // 3 hours
-					// 		Date:        time.Date(2025, 3, 22, 0, 0, 0, 0, time.UTC),
-					// 		MovieFormat: "3D",
-					// 	},
-					// },
+					// MovieTimeSlots
+					MovieTimeSlots: []models.MovieTimeSlot{
+						{
+							StartTime:   "18:00", // 6:00 PM
+							EndTime:     "21:00", // 9:00 PM
+							Duration:    180,     // 3 hours
+							Date:        time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
+							MovieFormat: "Dolby Atmos",
+						},
+						{
+							StartTime:   "22:00", // 10:00 PM
+							EndTime:     "01:00", // 1:00 AM
+							Duration:    180,     // 3 hours
+							Date:        time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
+							MovieFormat: "IMAX",
+						},
+					},
 				},
 			},
 		}
@@ -474,5 +679,31 @@ func TestMovieDB(t *testing.T) {
 			return
 		}
 
+	})
+
+	t.Run("Code to migrate the database", func(t *testing.T) {
+		if testing.Short() {
+			t.Skip("Skipping this test in short mode")
+		}
+
+		err := godotenv.Load()
+
+		if err != nil {
+			t.Errorf("Could not load .env file")
+		}
+
+		m := api.NewMovieDB()
+
+		// connect to database
+
+		conn, err := helper.ConnectToDB()
+
+		if err != nil {
+			t.Errorf("unable to connect to database")
+		}
+
+		m.DB.Conn = conn
+
+		m.DB.Conn.AutoMigrate(&models.Movie{}, &models.CastAndCrew{}, &models.Venue{}, &models.MovieTimeSlot{}, &models.SeatMatrix{})
 	})
 }
