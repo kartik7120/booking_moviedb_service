@@ -55,6 +55,8 @@ type Movie struct {
 	ReleaseDate     time.Time      `json:"release_date" gorm:"not null"`
 	MovieResolution pq.StringArray `json:"movie_resolution" gorm:"type:text[];not null"`
 	Venues          []Venue        `json:"venues" gorm:"many2many:movie_venues;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Ranking         uint           `json:"ranking"`
+	Votes           uint           `json:"votes"`
 }
 
 // Venue model
