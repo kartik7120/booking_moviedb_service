@@ -43,7 +43,7 @@ func TestMovieDB(t *testing.T) {
 			return
 		}
 
-		movieTimeSlotDate, err := time.Parse("2006-01-02", "2025-10-10")
+		movieTimeSlotDate, err := time.Parse("2006-01-02", "2025-04-05")
 
 		if err != nil {
 			t.Errorf("error parsing movie time slot date")
@@ -333,53 +333,158 @@ func TestMovieDB(t *testing.T) {
 		// 	},
 		// }
 
+		// movie := models.Movie{
+		// 	Title:       "Ford v Ferrari",
+		// 	Description: "American car designer Carroll Shelby and fearless driver Ken Miles battle corporate interference and the laws of physics to build a revolutionary race car for Ford to challenge Ferrari at the 24 Hours of Le Mans in 1966.",
+		// 	ReleaseDate: time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC), // Today's date
+		// 	PosterURL:   "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/6ApDtO7xaWAfPqfi2IARXIzj8QS.jpg",
+		// 	Duration:    152, // 2 hours 32 minutes
+		// 	Language:    pq.StringArray([]string{"English", "Italian"}),
+		// 	Type:        pq.StringArray([]string{"Action", "Biography", "Drama"}),
+		// 	MovieResolution: pq.StringArray([]string{
+		// 		"1080p", "720p", "480p",
+		// 	}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Matt Damon", Character: "Carroll Shelby", PhotoURL: "https://example.com/matt_damon.jpg"},
+		// 		{Type: "Cast", Name: "Christian Bale", Character: "Ken Miles", PhotoURL: "https://example.com/christian_bale.jpg"},
+		// 		{Type: "Cast", Name: "Jon Bernthal", Character: "Lee Iacocca", PhotoURL: "https://example.com/jon_bernthal.jpg"},
+		// 		{Type: "Crew", Name: "James Mangold", Character: "Director", PhotoURL: "https://example.com/james_mangold.jpg"},
+		// 	},
+		// 	Ranking: 8,
+		// 	Votes:   920,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Classic Drive-In Theater",
+		// 			Type:                 "2D",
+		// 			Address:              "66 Le Mans Blvd, Los Angeles",
+		// 			Latitude:             34.0522,
+		// 			Longitude:            -118.2437,
+		// 			Rows:                 20,
+		// 			Columns:              30,
+		// 			ScreenNumber:         2,
+		// 			MovieFormatSupported: pq.StringArray([]string{"2D", "Dolby Digital"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English"}),
+
+		// 			// MovieTimeSlots: []models.MovieTimeSlot{
+		// 			// 	{
+		// 			// 		StartTime:   "16:00",
+		// 			// 		EndTime:     "18:32",
+		// 			// 		Duration:    152,
+		// 			// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "2D",
+		// 			// 	},
+		// 			// 	{
+		// 			// 		StartTime:   "20:00",
+		// 			// 		EndTime:     "22:32",
+		// 			// 		Duration:    152,
+		// 			// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "Dolby Digital",
+		// 			// 	},
+		// 			// },
+		// 		},
+		// 	},
+		// }
+
+		// movie := models.Movie{
+		// 	Title:       "Drive",
+		// 	Description: "A mysterious Hollywood stuntman and mechanic moonlights as a getaway driver and finds himself in trouble when he helps out his neighbor.",
+		// 	ReleaseDate: time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC), // Today's date
+		// 	PosterURL:   "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/602vevIURmpDfzbnv5Ubi6wIkQm.jpg",
+		// 	Duration:    100, // 1 hour 40 minutes
+		// 	Language:    pq.StringArray([]string{"English"}),
+		// 	Type:        pq.StringArray([]string{"Crime", "Drama", "Thriller"}),
+		// 	MovieResolution: pq.StringArray([]string{
+		// 		"1080p", "720p",
+		// 	}),
+		// 	CastCrew: []models.CastAndCrew{
+		// 		{Type: "Cast", Name: "Ryan Gosling", Character: "Driver", PhotoURL: "https://example.com/ryan_gosling.jpg"},
+		// 		{Type: "Cast", Name: "Carey Mulligan", Character: "Irene", PhotoURL: "https://example.com/carey_mulligan.jpg"},
+		// 		{Type: "Cast", Name: "Bryan Cranston", Character: "Shannon", PhotoURL: "https://example.com/bryan_cranston.jpg"},
+		// 		{Type: "Crew", Name: "Nicolas Winding Refn", Character: "Director", PhotoURL: "https://example.com/nicolas_refn.jpg"},
+		// 	},
+		// 	Ranking: 9,
+		// 	Votes:   1500,
+		// 	Venues: []models.Venue{
+		// 		{
+		// 			Name:                 "Neo Noir Cinema",
+		// 			Type:                 "2D",
+		// 			Address:              "42 Night Drive, Los Angeles, CA",
+		// 			Latitude:             34.0522,
+		// 			Longitude:            -118.2437,
+		// 			Rows:                 15,
+		// 			Columns:              25,
+		// 			ScreenNumber:         3,
+		// 			MovieFormatSupported: pq.StringArray([]string{"2D", "Dolby Digital"}),
+		// 			LanguagesSupported:   pq.StringArray([]string{"English"}),
+
+		// 			// MovieTimeSlots: []models.MovieTimeSlot{
+		// 			// 	{
+		// 			// 		StartTime:   "19:00",
+		// 			// 		EndTime:     "20:40",
+		// 			// 		Duration:    100,
+		// 			// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "2D",
+		// 			// 	},
+		// 			// 	{
+		// 			// 		StartTime:   "21:30",
+		// 			// 		EndTime:     "23:10",
+		// 			// 		Duration:    100,
+		// 			// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+		// 			// 		MovieFormat: "Dolby Digital",
+		// 			// 	},
+		// 			// },
+		// 		},
+		// 	},
+		// }
+
 		movie := models.Movie{
-			Title:           "John Wick: Chapter 4",
-			Description:     "John Wick uncovers a path to defeating The High Table, but before he can earn his freedom, he must face a new enemy with powerful alliances across the globe.",
-			ReleaseDate:     time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
-			PosterURL:       "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg",
-			Duration:        169, // 2 hours 49 minutes
-			Language:        pq.StringArray([]string{"English", "French", "Japanese"}),
-			Type:            pq.StringArray([]string{"Action", "Thriller", "Crime"}),
-			MovieResolution: pq.StringArray([]string{"4K", "1080p", "720p"}),
+			Title:       "Tron: Legacy",
+			Description: "The son of a virtual world designer goes looking for his father and ends up inside the digital world that his father designed. He meets his father's corrupted creation and a unique ally who was born inside the digital world.",
+			ReleaseDate: time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC), // Today's date
+			PosterURL:   "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/9xkGLvAxu7f5PawQ6qJ4fF1wR0i.jpg",
+			Duration:    125, // 2 hours 5 minutes
+			Language:    pq.StringArray([]string{"English"}),
+			Type:        pq.StringArray([]string{"Action", "Science Fiction", "Adventure"}),
+			MovieResolution: pq.StringArray([]string{
+				"4K", "1080p", "720p",
+			}),
 			CastCrew: []models.CastAndCrew{
-				{Type: "Cast", Name: "Keanu Reeves", Character: "John Wick", PhotoURL: "https://example.com/keanu_reeves.jpg"},
-				{Type: "Cast", Name: "Donnie Yen", Character: "Caine", PhotoURL: "https://example.com/donnie_yen.jpg"},
-				{Type: "Cast", Name: "Bill Skarsgård", Character: "Marquis", PhotoURL: "https://example.com/bill_skarsgard.jpg"},
-				{Type: "Crew", Name: "Chad Stahelski", Character: "Director", PhotoURL: "https://example.com/chad_stahelski.jpg"},
+				{Type: "Cast", Name: "Garrett Hedlund", Character: "Sam Flynn", PhotoURL: "https://example.com/garrett_hedlund.jpg"},
+				{Type: "Cast", Name: "Jeff Bridges", Character: "Kevin Flynn / Clu", PhotoURL: "https://example.com/jeff_bridges.jpg"},
+				{Type: "Cast", Name: "Olivia Wilde", Character: "Quorra", PhotoURL: "https://example.com/olivia_wilde.jpg"},
+				{Type: "Crew", Name: "Joseph Kosinski", Character: "Director", PhotoURL: "https://example.com/joseph_kosinski.jpg"},
 			},
-			Ranking: 15,
-			Votes:   1200,
+			Ranking: 11,
+			Votes:   1350,
 			Venues: []models.Venue{
 				{
-					Name:                 "Continental Grand Cinema",
-					Type:                 "Dolby Atmos",
-					Address:              "1 High Table Avenue, New York City",
-					Latitude:             40.7128,
-					Longitude:            -74.0060,
-					Rows:                 25,
-					Columns:              35,
-					ScreenNumber:         5,
-					MovieFormatSupported: pq.StringArray([]string{"Dolby Atmos", "IMAX", "2D"}),
-					LanguagesSupported:   pq.StringArray([]string{"English", "French"}),
+					Name:                 "Grid Central IMAX",
+					Type:                 "IMAX 3D",
+					Address:              "88 Lightcycle Ave, San Francisco, CA",
+					Latitude:             37.7749,
+					Longitude:            -122.4194,
+					Rows:                 30,
+					Columns:              40,
+					ScreenNumber:         7,
+					MovieFormatSupported: pq.StringArray([]string{"IMAX 3D", "2D", "Dolby Atmos"}),
+					LanguagesSupported:   pq.StringArray([]string{"English"}),
 
-					// MovieTimeSlots
-					MovieTimeSlots: []models.MovieTimeSlot{
-						{
-							StartTime:   "18:00", // 6:00 PM
-							EndTime:     "21:00", // 9:00 PM
-							Duration:    180,     // 3 hours
-							Date:        time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
-							MovieFormat: "Dolby Atmos",
-						},
-						{
-							StartTime:   "22:00", // 10:00 PM
-							EndTime:     "01:00", // 1:00 AM
-							Duration:    180,     // 3 hours
-							Date:        time.Date(2025, 4, 20, 0, 0, 0, 0, time.UTC),
-							MovieFormat: "IMAX",
-						},
-					},
+					// MovieTimeSlots: []models.MovieTimeSlot{
+					// 	{
+					// 		StartTime:   "17:00",
+					// 		EndTime:     "19:05",
+					// 		Duration:    125,
+					// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+					// 		MovieFormat: "IMAX 3D",
+					// 	},
+					// 	{
+					// 		StartTime:   "20:00",
+					// 		EndTime:     "22:05",
+					// 		Duration:    125,
+					// 		Date:        time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),
+					// 		MovieFormat: "Dolby Atmos",
+					// 	},
+					// },
 				},
 			},
 		}

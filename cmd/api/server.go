@@ -585,11 +585,14 @@ func (m *MoviedbService) GetUpcomingMovies(ctx context.Context, in *moviedb.GetU
 
 }
 
-func (m *MoviedbService) GetNowPlayingMovies(ctx context.Context, in *moviedb.GetUpcomingMovieRequest) (*moviedb.GetUpcomingMovieResponse, error) {
+func (m *MoviedbService) GetNowPlayingMovies(ctx context.Context, in *moviedb.GetNowPlayingMovieRequest) (*moviedb.GetUpcomingMovieResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	movies, status, err := m.MovieDB.GetNowPlayingMovies()
+	movies, status, err := m.MovieDB.GetNowPlayingMovies(
+		int32(in.Longitude),
+		int32(in.Latitude),
+	)
 
 	if status != 200 {
 		return &moviedb.GetUpcomingMovieResponse{

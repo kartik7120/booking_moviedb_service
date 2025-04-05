@@ -49,7 +49,7 @@ type MovieDBServiceClient interface {
 	UpdateVenue(ctx context.Context, in *Venue, opts ...grpc.CallOption) (*VenueResponse, error)
 	DeleteVenue(ctx context.Context, in *MovieRequest, opts ...grpc.CallOption) (*MovieResponse, error)
 	GetUpcomingMovies(ctx context.Context, in *GetUpcomingMovieRequest, opts ...grpc.CallOption) (*GetUpcomingMovieResponse, error)
-	GetNowPlayingMovies(ctx context.Context, in *GetUpcomingMovieRequest, opts ...grpc.CallOption) (*GetUpcomingMovieResponse, error)
+	GetNowPlayingMovies(ctx context.Context, in *GetNowPlayingMovieRequest, opts ...grpc.CallOption) (*GetUpcomingMovieResponse, error)
 }
 
 type movieDBServiceClient struct {
@@ -170,7 +170,7 @@ func (c *movieDBServiceClient) GetUpcomingMovies(ctx context.Context, in *GetUpc
 	return out, nil
 }
 
-func (c *movieDBServiceClient) GetNowPlayingMovies(ctx context.Context, in *GetUpcomingMovieRequest, opts ...grpc.CallOption) (*GetUpcomingMovieResponse, error) {
+func (c *movieDBServiceClient) GetNowPlayingMovies(ctx context.Context, in *GetNowPlayingMovieRequest, opts ...grpc.CallOption) (*GetUpcomingMovieResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetUpcomingMovieResponse)
 	err := c.cc.Invoke(ctx, MovieDBService_GetNowPlayingMovies_FullMethodName, in, out, cOpts...)
@@ -195,7 +195,7 @@ type MovieDBServiceServer interface {
 	UpdateVenue(context.Context, *Venue) (*VenueResponse, error)
 	DeleteVenue(context.Context, *MovieRequest) (*MovieResponse, error)
 	GetUpcomingMovies(context.Context, *GetUpcomingMovieRequest) (*GetUpcomingMovieResponse, error)
-	GetNowPlayingMovies(context.Context, *GetUpcomingMovieRequest) (*GetUpcomingMovieResponse, error)
+	GetNowPlayingMovies(context.Context, *GetNowPlayingMovieRequest) (*GetUpcomingMovieResponse, error)
 	mustEmbedUnimplementedMovieDBServiceServer()
 }
 
@@ -239,7 +239,7 @@ func (UnimplementedMovieDBServiceServer) DeleteVenue(context.Context, *MovieRequ
 func (UnimplementedMovieDBServiceServer) GetUpcomingMovies(context.Context, *GetUpcomingMovieRequest) (*GetUpcomingMovieResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUpcomingMovies not implemented")
 }
-func (UnimplementedMovieDBServiceServer) GetNowPlayingMovies(context.Context, *GetUpcomingMovieRequest) (*GetUpcomingMovieResponse, error) {
+func (UnimplementedMovieDBServiceServer) GetNowPlayingMovies(context.Context, *GetNowPlayingMovieRequest) (*GetUpcomingMovieResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNowPlayingMovies not implemented")
 }
 func (UnimplementedMovieDBServiceServer) mustEmbedUnimplementedMovieDBServiceServer() {}
@@ -462,7 +462,7 @@ func _MovieDBService_GetUpcomingMovies_Handler(srv interface{}, ctx context.Cont
 }
 
 func _MovieDBService_GetNowPlayingMovies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUpcomingMovieRequest)
+	in := new(GetNowPlayingMovieRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -474,7 +474,7 @@ func _MovieDBService_GetNowPlayingMovies_Handler(srv interface{}, ctx context.Co
 		FullMethod: MovieDBService_GetNowPlayingMovies_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MovieDBServiceServer).GetNowPlayingMovies(ctx, req.(*GetUpcomingMovieRequest))
+		return srv.(MovieDBServiceServer).GetNowPlayingMovies(ctx, req.(*GetNowPlayingMovieRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

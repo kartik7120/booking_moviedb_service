@@ -288,14 +288,33 @@ func (m *MovieDB) GetUpcomingMovies(date string) ([]models.Movie, int, error) {
 	return movies, 200, nil
 }
 
-func (m *MovieDB) GetNowPlayingMovies() ([]models.Movie, int, error) {
+func (m *MovieDB) GetNowPlayingMovies(longitude, latitude int32) ([]models.Movie, int, error) {
 	today := time.Now().Truncate(24 * time.Hour)
 
 	var movies []models.Movie
+
+	if longitude == 0 && latitude == 0 {
+		// If no coordinates are provided, fetch all movies released today or earlier
+		err := m.DB.Conn.
+			Joins("JOIN movie_time_slots mts ON mts.movie_id = movies.id").
+			Where("movies.release_date <= ?", today).
+			Where("DATE(mts.date) = ?", today).
+			Group("movies.id").
+			Find(&movies).Error
+
+		if err != nil {
+			return nil, 500, err
+		}
+	}
+
+	// If coordinates are provided, fetch movies released today or earlier and within 30km of the coordinates
+
 	err := m.DB.Conn.
 		Joins("JOIN movie_time_slots mts ON mts.movie_id = movies.id").
+		Joins("JOIN venues venue ON mts.venue_id = venue.id"). // Add this JOIN
 		Where("movies.release_date <= ?", today).
 		Where("DATE(mts.date) = ?", today).
+		Where("ST_DistanceSphere(ST_MakePoint(?, ?), ST_MakePoint(venue.longitude, venue.latitude)) <= ?", longitude, latitude, 30000).
 		Group("movies.id").
 		Find(&movies).Error
 

@@ -1188,6 +1188,58 @@ func (x *GetUpcomingMovieResponse) GetError() string {
 	return ""
 }
 
+type GetNowPlayingMovieRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Longitude     int64                  `protobuf:"varint,1,opt,name=longitude,proto3" json:"longitude,omitempty"`
+	Latitude      int64                  `protobuf:"varint,2,opt,name=latitude,proto3" json:"latitude,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetNowPlayingMovieRequest) Reset() {
+	*x = GetNowPlayingMovieRequest{}
+	mi := &file_moviedb_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetNowPlayingMovieRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetNowPlayingMovieRequest) ProtoMessage() {}
+
+func (x *GetNowPlayingMovieRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_moviedb_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetNowPlayingMovieRequest.ProtoReflect.Descriptor instead.
+func (*GetNowPlayingMovieRequest) Descriptor() ([]byte, []int) {
+	return file_moviedb_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetNowPlayingMovieRequest) GetLongitude() int64 {
+	if x != nil {
+		return x.Longitude
+	}
+	return 0
+}
+
+func (x *GetNowPlayingMovieRequest) GetLatitude() int64 {
+	if x != nil {
+		return x.Latitude
+	}
+	return 0
+}
+
 var File_moviedb_service_proto protoreflect.FileDescriptor
 
 const file_moviedb_service_proto_rawDesc = "" +
@@ -1277,7 +1329,10 @@ const file_moviedb_service_proto_rawDesc = "" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x125\n" +
 	"\n" +
 	"movie_list\x18\x03 \x03(\v2\x16.moviedb_service.MovieR\tmovieList\x12\x14\n" +
-	"\x05error\x18\x04 \x01(\tR\x05error*\xb8\x03\n" +
+	"\x05error\x18\x04 \x01(\tR\x05error\"U\n" +
+	"\x19GetNowPlayingMovieRequest\x12\x1c\n" +
+	"\tlongitude\x18\x01 \x01(\x03R\tlongitude\x12\x1a\n" +
+	"\blatitude\x18\x02 \x01(\x03R\blatitude*\xb8\x03\n" +
 	"\x0fCastAndCrewType\x12\t\n" +
 	"\x05ACTOR\x10\x00\x12\f\n" +
 	"\bDIRECTOR\x10\x01\x12\f\n" +
@@ -1321,7 +1376,7 @@ const file_moviedb_service_proto_rawDesc = "" +
 	"\x06FOUR_D\x10\x02\x12\n" +
 	"\n" +
 	"\x06NORMAL\x10\x03\x12\a\n" +
-	"\x03VIP\x10\x042\xc6\a\n" +
+	"\x03VIP\x10\x042\xc8\a\n" +
 	"\x0eMovieDBService\x12B\n" +
 	"\bAddMovie\x12\x16.moviedb_service.Movie\x1a\x1e.moviedb_service.MovieResponse\x12I\n" +
 	"\bGetMovie\x12\x1d.moviedb_service.MovieRequest\x1a\x1e.moviedb_service.MovieResponse\x12J\n" +
@@ -1333,8 +1388,8 @@ const file_moviedb_service_proto_rawDesc = "" +
 	"\fGetAllVenues\x12\x16.google.protobuf.Empty\x1a\".moviedb_service.MovieListResponse\x12E\n" +
 	"\vUpdateVenue\x12\x16.moviedb_service.Venue\x1a\x1e.moviedb_service.VenueResponse\x12L\n" +
 	"\vDeleteVenue\x12\x1d.moviedb_service.MovieRequest\x1a\x1e.moviedb_service.MovieResponse\x12h\n" +
-	"\x11GetUpcomingMovies\x12(.moviedb_service.GetUpcomingMovieRequest\x1a).moviedb_service.GetUpcomingMovieResponse\x12j\n" +
-	"\x13GetNowPlayingMovies\x12(.moviedb_service.GetUpcomingMovieRequest\x1a).moviedb_service.GetUpcomingMovieResponseBFZDgithub.com/kartik7120/booking_moviedb_service/cmd/grpcServer;moviedbb\x06proto3"
+	"\x11GetUpcomingMovies\x12(.moviedb_service.GetUpcomingMovieRequest\x1a).moviedb_service.GetUpcomingMovieResponse\x12l\n" +
+	"\x13GetNowPlayingMovies\x12*.moviedb_service.GetNowPlayingMovieRequest\x1a).moviedb_service.GetUpcomingMovieResponseBFZDgithub.com/kartik7120/booking_moviedb_service/cmd/grpcServer;moviedbb\x06proto3"
 
 var (
 	file_moviedb_service_proto_rawDescOnce sync.Once
@@ -1349,24 +1404,25 @@ func file_moviedb_service_proto_rawDescGZIP() []byte {
 }
 
 var file_moviedb_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_moviedb_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_moviedb_service_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_moviedb_service_proto_goTypes = []any{
-	(CastAndCrewType)(0),             // 0: moviedb_service.CastAndCrewType
-	(VenueType)(0),                   // 1: moviedb_service.VenueType
-	(SeatType)(0),                    // 2: moviedb_service.SeatType
-	(*CastAndCrew)(nil),              // 3: moviedb_service.CastAndCrew
-	(*MovieTimeSlot)(nil),            // 4: moviedb_service.MovieTimeSlot
-	(*Movie)(nil),                    // 5: moviedb_service.Movie
-	(*SeatMatrix)(nil),               // 6: moviedb_service.SeatMatrix
-	(*Venue)(nil),                    // 7: moviedb_service.Venue
-	(*MovieList)(nil),                // 8: moviedb_service.MovieList
-	(*MovieRequest)(nil),             // 9: moviedb_service.MovieRequest
-	(*MovieResponse)(nil),            // 10: moviedb_service.MovieResponse
-	(*MovieListResponse)(nil),        // 11: moviedb_service.MovieListResponse
-	(*VenueResponse)(nil),            // 12: moviedb_service.VenueResponse
-	(*GetUpcomingMovieRequest)(nil),  // 13: moviedb_service.GetUpcomingMovieRequest
-	(*GetUpcomingMovieResponse)(nil), // 14: moviedb_service.GetUpcomingMovieResponse
-	(*empty.Empty)(nil),              // 15: google.protobuf.Empty
+	(CastAndCrewType)(0),              // 0: moviedb_service.CastAndCrewType
+	(VenueType)(0),                    // 1: moviedb_service.VenueType
+	(SeatType)(0),                     // 2: moviedb_service.SeatType
+	(*CastAndCrew)(nil),               // 3: moviedb_service.CastAndCrew
+	(*MovieTimeSlot)(nil),             // 4: moviedb_service.MovieTimeSlot
+	(*Movie)(nil),                     // 5: moviedb_service.Movie
+	(*SeatMatrix)(nil),                // 6: moviedb_service.SeatMatrix
+	(*Venue)(nil),                     // 7: moviedb_service.Venue
+	(*MovieList)(nil),                 // 8: moviedb_service.MovieList
+	(*MovieRequest)(nil),              // 9: moviedb_service.MovieRequest
+	(*MovieResponse)(nil),             // 10: moviedb_service.MovieResponse
+	(*MovieListResponse)(nil),         // 11: moviedb_service.MovieListResponse
+	(*VenueResponse)(nil),             // 12: moviedb_service.VenueResponse
+	(*GetUpcomingMovieRequest)(nil),   // 13: moviedb_service.GetUpcomingMovieRequest
+	(*GetUpcomingMovieResponse)(nil),  // 14: moviedb_service.GetUpcomingMovieResponse
+	(*GetNowPlayingMovieRequest)(nil), // 15: moviedb_service.GetNowPlayingMovieRequest
+	(*empty.Empty)(nil),               // 16: google.protobuf.Empty
 }
 var file_moviedb_service_proto_depIdxs = []int32{
 	0,  // 0: moviedb_service.CastAndCrew.type:type_name -> moviedb_service.CastAndCrewType
@@ -1385,16 +1441,16 @@ var file_moviedb_service_proto_depIdxs = []int32{
 	5,  // 13: moviedb_service.GetUpcomingMovieResponse.movie_list:type_name -> moviedb_service.Movie
 	5,  // 14: moviedb_service.MovieDBService.AddMovie:input_type -> moviedb_service.Movie
 	9,  // 15: moviedb_service.MovieDBService.GetMovie:input_type -> moviedb_service.MovieRequest
-	15, // 16: moviedb_service.MovieDBService.GetAllMovies:input_type -> google.protobuf.Empty
+	16, // 16: moviedb_service.MovieDBService.GetAllMovies:input_type -> google.protobuf.Empty
 	5,  // 17: moviedb_service.MovieDBService.UpdateMovie:input_type -> moviedb_service.Movie
 	9,  // 18: moviedb_service.MovieDBService.DeleteMovie:input_type -> moviedb_service.MovieRequest
 	7,  // 19: moviedb_service.MovieDBService.AddVenue:input_type -> moviedb_service.Venue
 	9,  // 20: moviedb_service.MovieDBService.GetVenue:input_type -> moviedb_service.MovieRequest
-	15, // 21: moviedb_service.MovieDBService.GetAllVenues:input_type -> google.protobuf.Empty
+	16, // 21: moviedb_service.MovieDBService.GetAllVenues:input_type -> google.protobuf.Empty
 	7,  // 22: moviedb_service.MovieDBService.UpdateVenue:input_type -> moviedb_service.Venue
 	9,  // 23: moviedb_service.MovieDBService.DeleteVenue:input_type -> moviedb_service.MovieRequest
 	13, // 24: moviedb_service.MovieDBService.GetUpcomingMovies:input_type -> moviedb_service.GetUpcomingMovieRequest
-	13, // 25: moviedb_service.MovieDBService.GetNowPlayingMovies:input_type -> moviedb_service.GetUpcomingMovieRequest
+	15, // 25: moviedb_service.MovieDBService.GetNowPlayingMovies:input_type -> moviedb_service.GetNowPlayingMovieRequest
 	10, // 26: moviedb_service.MovieDBService.AddMovie:output_type -> moviedb_service.MovieResponse
 	10, // 27: moviedb_service.MovieDBService.GetMovie:output_type -> moviedb_service.MovieResponse
 	11, // 28: moviedb_service.MovieDBService.GetAllMovies:output_type -> moviedb_service.MovieListResponse
@@ -1425,7 +1481,7 @@ func file_moviedb_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_moviedb_service_proto_rawDesc), len(file_moviedb_service_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   12,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

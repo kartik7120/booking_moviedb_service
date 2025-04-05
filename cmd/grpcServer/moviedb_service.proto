@@ -149,6 +149,11 @@ message GetUpcomingMovieResponse {
     string error = 4;
 }
 
+message GetNowPlayingMovieRequest {
+    int64 longitude = 1;
+    int64 latitude = 2;
+}
+
 service MovieDBService {
     rpc AddMovie (Movie) returns (MovieResponse);
     rpc GetMovie (MovieRequest) returns (MovieResponse);
@@ -161,5 +166,5 @@ service MovieDBService {
     rpc UpdateVenue (Venue) returns (VenueResponse);
     rpc DeleteVenue (MovieRequest) returns (MovieResponse);
     rpc GetUpcomingMovies (GetUpcomingMovieRequest) returns (GetUpcomingMovieResponse);
-    rpc GetNowPlayingMovies (GetUpcomingMovieRequest) returns (GetUpcomingMovieResponse);
+    rpc GetNowPlayingMovies (GetNowPlayingMovieRequest) returns (GetUpcomingMovieResponse);
 }
